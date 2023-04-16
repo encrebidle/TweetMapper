@@ -1,0 +1,18 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "aws.connect.psdb.cloud",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "encrebidledb",
+            "username": "0c7aw7mzy7irdly78y2q",
+            "password": "pscale_pw_RSpBT8gKEMmqlmMfseexzvesAwyE4JPao2TO2pZGvB7",
+            "database": "encrebidledb",
+            "connectionTimeout": 100
+        }
+    ]
+}

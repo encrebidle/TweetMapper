@@ -15,7 +15,7 @@ def tweetretreive(sword,fdate):
     api_secret ="iSfLYffRBJYzV3FfMu6EmPtxRxazjfLAZXHxEPf0w9OgZ4W6SV"
     access_key ="821033293688737792-rfY8oUypzHcDy7WVe4wIT0wQSm7mdXX"
     access_secret="U2z3ede3BW24fxIABI0NbQtO0K6zZomIizM58g3Rmm7Ty"
-    
+    #insert into tweetcon values("eDTNvP8goTAxpQpcCmYqNUMfS","iSfLYffRBJYzV3FfMu6EmPtxRxazjfLAZXHxEPf0w9OgZ4W6SV","821033293688737792-rfY8oUypzHcDy7WVe4wIT0wQSm7mdXX","U2z3ede3BW24fxIABI0NbQtO0K6zZomIizM58g3Rmm7Ty");
     auth = tw.OAuthHandler(api_key,api_secret)
     auth.set_access_token(access_key,access_secret)
     
