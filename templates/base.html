@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>❄️RealTime Tweet Data Geolocation Visualization ❄️</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+<meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="./base.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!-- Canvas -->
+<canvas class="orb-canvas"></canvas>
+<!-- Overlay -->
+<button class="fixed_position overlay__btn--colors">
+    <span></span>
+    <span class="overlay__btn-emoji">🎨</span>
+  </button>
+<div class="overlay">
+    
+  <!-- Overlay inner wrapper -->
+  <div class="overlay__inner">
+    
+    <!-- Title -->
+    <h1 class="overlay__title">
+        <span class="text-gradient">TweetMapper</span>
+      , a realtime analysis tool to visualize tweets based based on words across the globe.
+     
+    </h1>
+   
+    
+    <!-- Description -->
+    <p class="overlay__description">
+      This tool shows how to
+      <strong>We're gonna talk accessibility, too.</strong>
+    </p>
+    <!-- Buttons -->
+    <div class="overlay__btns">
+
+      <button class="overlay__btn overlay__btn--transparent">
+        <a href="" target="_blank">
+
+          View Tutorial
+        </a>
+      </button>
+
+     
+    </div>
+    
+  </div>
+  
+</div>
+
+<div class="overlay">
+    <!-- Overlay inner wrapper -->
+    <div class="overlay__inner">
+        <h1 class="overlay__title">
+            <span class="text-gradient">Fetch Tweets</span>
+          , a realtime analysis tool to visualize tweets based based on words across the globe.
+         
+        </h1>
+        <div class="inputform_load">
+            <form action="{{ url_for("gfg")}}" method="post">
+                <label for="firstname"><strong>Hashtag</strong></label>
+                <input type="text" id="hashtag" name="hashtag" placeholder="Hashtag,Words,etc">
+                <label for="From Date"><strong>From Date</strong></label>
+                <input type="date" id="date" name="date" placeholder="lastname">
+                <label for="count"><strong>Count</strong></label>
+                <input type="text" id="hashtag" name="hashtag" placeholder="Hashtag,Words,etc">
+                <button class="overlay__btn overlay__btn--transparent" type="submit"><strong>Load Tweets</strong></button>
+        </div>
+    </div>
+  </div>
+  <div class="overlay">
+    <!-- Overlay inner wrapper -->
+    <div class="overlay__inner">
+        <h1 class="overlay__title">
+            <span class="text-gradient">Generate Geolocations</span>
+          , a realtime analysis tool to visualize tweets based based on words across the globe.
+         
+        </h1>
+        <div class="inputform_load">
+            <form action="{{ url_for("gfg")}}" method="post">
+                <label for="firstname"><strong>Hashtag</strong></label>
+                <input type="text" id="hashtag" name="hashtag" placeholder="Hashtag,Words,etc">
+                <label for="From Date"><strong>From Date</strong></label>
+                <input type="date" id="date" name="date" placeholder="lastname">
+                <label for="count"><strong>Count</strong></label>
+                <input type="text" id="hashtag" name="hashtag" placeholder="Hashtag,Words,etc">
+                <button class="overlay__btn overlay__btn--transparent" type="submit"><strong>Load Tweets</strong></button>
+        </div>
+    </div>
+  </div>
+  <div class="overlay">
+    <!-- Overlay inner wrapper -->
+    <div class="overlay__inner">
+        <h1 class="overlay__title">
+            <span class="text-gradient">Fetch Tweets</span>
+          , a realtime analysis tool to visualize tweets based based on words across the globe.
+         
+        </h1>
+        <div class="inputform_load">
+            <form action="{{ url_for("gfg")}}" method="post">
+                <label for="firstname"><strong>Hashtag</strong></label>
+                <input type="text" id="hashtag" name="hashtag" placeholder="Hashtag,Words,etc">
+                <label for="From Date"><strong>From Date</strong></label>
+                <input type="date" id="date" name="date" placeholder="lastname">
+                <label for="count"><strong>Count</strong></label>
+                <input type="text" id="hashtag" name="hashtag" placeholder="Hashtag,Words,etc">
+                <button class="overlay__btn overlay__btn--transparent" type="submit"><strong>Load Tweets</strong></button>
+        </div>
+    </div>
+  </div>
+<!-- partial -->
+  <script type="module" src="./base.js"></script>
+
+</body>
+</html>

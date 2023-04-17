@@ -6,23 +6,31 @@ def tweetretreive(sword,fdate):
     import tweepy as tw
     import pandas as pd
     from tqdm import tqdm, notebook
+    from database import dbquery
+    import sys
+    sys.path.insert(1,r'C:\Users\encre\OneDrive\Desktop\2023_Learning_Vault_Atulya\Credentials')
+    from credentials import credential_mysql
 
     pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
     pd.set_option('display.max_colwidth', None)
     pd.set_option('display.width', None)
-    api_key = "eDTNvP8goTAxpQpcCmYqNUMfS"
-    api_secret ="iSfLYffRBJYzV3FfMu6EmPtxRxazjfLAZXHxEPf0w9OgZ4W6SV"
-    access_key ="821033293688737792-rfY8oUypzHcDy7WVe4wIT0wQSm7mdXX"
-    access_secret="U2z3ede3BW24fxIABI0NbQtO0K6zZomIizM58g3Rmm7Ty"
-    #insert into tweetcon values("eDTNvP8goTAxpQpcCmYqNUMfS","iSfLYffRBJYzV3FfMu6EmPtxRxazjfLAZXHxEPf0w9OgZ4W6SV","821033293688737792-rfY8oUypzHcDy7WVe4wIT0wQSm7mdXX","U2z3ede3BW24fxIABI0NbQtO0K6zZomIizM58g3Rmm7Ty");
+    
+    query= "select * from tweetcon"
+    credentials = dbquery(query)
+    api_key = credentials[0][0]
+    api_secret =credentials[0][1]
+    access_key =credentials[0][2]
+    access_secret=credentials[0][3]
+    
     auth = tw.OAuthHandler(api_key,api_secret)
     auth.set_access_token(access_key,access_secret)
     
     #auth = tw.OAuthHandler(api_key, api_secret)
     
     api = tw.API(auth, wait_on_rate_limit=True)
-    
+    word= sword
+    sword = sword + " -filter:retweets"
     tweets = tw.Cursor(api.search_tweets,q=sword,lang="en",since=fdate).items(10)
     
     tweets_copy = []
@@ -69,7 +77,30 @@ def tweetretreive(sword,fdate):
     #Removing duplicates if exists
     #tweets_all_df.drop_duplicates(subset = ["user_name", "date", "text"], inplace=True)
     #exporting data to update csv
-    tweets_df.to_csv(name +"_tweets.csv", index=False)
+    import sqlalchemy
+    import mysql.connector
+    from sqlalchemy import create_engine
+    import pandas as pd
+    
+    
+    db_string = credential_mysql()
+    engine = create_engine(db_string,
+    connect_args={
+        "ssl":{
+            "ssl_ca": "/etc/ssl/cert.pem"
+        }
+    })
+    #q=""
+    #df = pd.read_sql_query(q,con=engine)
+    #data = {'product_name': ['Computer','Tablet','Monitor','Printer'],
+        #'price': [900,300,450,150]
+        #}
+
+    #df = pd.DataFrame(data, columns= ['product_name','price'])
+    tweets_df["hashtag"] = word
+    tweets_df.to_sql(name='tabletest',con=engine, if_exists = 'append',index=False)
+    #tweets_df.to_csv(name +"_tweets.csv", index=False)
     
     return tweets_df
             
+#tweetretreive("#royalchallengers", "2021-01-01")

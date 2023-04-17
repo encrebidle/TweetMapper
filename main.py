@@ -1,23 +1,19 @@
 from flask import Flask
-from flask import request
+from flask import request, render_template
 from etlfunc import tweetretreive
 from flask_jsonpify import jsonpify
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods= ['GET', 'POST'])
 def index():
-    sword = request.args.get("sword", "")
-    if sword:
-        result = form(sword)
-    else:
-        result = ""
-    return (
-        """<form action="" method="get">
-                <input type="text" name="sword">
-                <input type="submit" value="Generate Data">
-            </form>"""
-        +  result
-    )
+    if request.method == "POST":
+        sword = request.form.get("sword") #
+        fdate = request.form.get("fdate") #
+        return "HEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHEHE"
+        
+    return render_template("home.html")
+        
+        
 
 @app.route("/<string:sword>/")
 
