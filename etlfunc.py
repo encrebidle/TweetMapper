@@ -1,6 +1,6 @@
 
 
-def tweetretreive(sword,fdate):
+def tweetretreive(sword,volume):
     
     import os
     import tweepy as tw
@@ -22,7 +22,14 @@ def tweetretreive(sword,fdate):
     api_secret =credentials[0][1]
     access_key =credentials[0][2]
     access_secret=credentials[0][3]
-    
+    token = credential_mysql('twitter')
+    client = tw.Client(bearer_token= token)
+    #word= sword
+    #query= sword + " -is:retweet"
+    #tweets = ""
+    #tweets = client.search_all_tweets(query=query, max_results = volume)
+    #for tweet in tw.Paginator(client.search_all_tweets,query=query,max_results=100).flatten(limit=10000):
+        #tweets.append(tweet)
     auth = tw.OAuthHandler(api_key,api_secret)
     auth.set_access_token(access_key,access_secret)
     
@@ -31,12 +38,13 @@ def tweetretreive(sword,fdate):
     api = tw.API(auth, wait_on_rate_limit=True)
     word= sword
     sword = sword + " -filter:retweets"
-    tweets = tw.Cursor(api.search_tweets,q=sword,lang="en",since=fdate).items(10)
+    tweets = tw.Cursor(api.search_tweets,q=sword,lang="en",max_results=volume).items(10000)
     
     tweets_copy = []
     
     for tweet in tqdm(tweets):
          tweets_copy.append(tweet)
+         #tweets.next()
     
     tweets_df = pd.DataFrame()
     for tweet in tqdm(tweets_copy):
@@ -61,29 +69,14 @@ def tweetretreive(sword,fdate):
                                                    'source': tweet.source,
                                                    'is_retweet': tweet.retweeted}, index=[0]))
     
-    #Read past fetched data if exists
-    #tweets_old_df = pd.read_csv("covid19_tweets.csv")
-    #Merge both old and new data
-    #tweets_all_df = pd.concat([tweets_old_df, tweets_df], axis=0)
-    #Removing duplicates if exists
-    #tweets_all_df.drop_duplicates(subset = ["user_name", "date", "text"], inplace=True)
-    #exporting data to update csv
-    #tweets_all_df.to_csv("covid19_tweets.csv", index=False)
-    name= sword[1:-16]
-    #Read past fetched data if exists
-    #tweets_old_df = pd.read_csv("covid19_tweets.csv")
-    #Merge both old and new data
-    #tweets_all_df = pd.concat([tweets_old_df, tweets_df], axis=0)
-    #Removing duplicates if exists
-    #tweets_all_df.drop_duplicates(subset = ["user_name", "date", "text"], inplace=True)
-    #exporting data to update csv
+    
     import sqlalchemy
     import mysql.connector
     from sqlalchemy import create_engine
     import pandas as pd
     
     
-    db_string = credential_mysql()
+    db_string = credential_mysql('sql')
     engine = create_engine(db_string,
     connect_args={
         "ssl":{
@@ -95,12 +88,35 @@ def tweetretreive(sword,fdate):
     #data = {'product_name': ['Computer','Tablet','Monitor','Printer'],
         #'price': [900,300,450,150]
         #}
-
+    import os
+    path = "C:/Users/encre/OneDrive/Desktop/2023LearnigVault/datasets"
+    outf= os.path.join(path,(word[1:] +"_tweets.csv"))
     #df = pd.DataFrame(data, columns= ['product_name','price'])
-    tweets_df["hashtag"] = word
-    tweets_df.to_sql(name='tabletest',con=engine, if_exists = 'append',index=False)
-    #tweets_df.to_csv(name +"_tweets.csv", index=False)
+    #tweets_df["hashtag"] = word
+    #tweets_df.to_sql(name='tabletest',con=engine, if_exists = 'append',index=False)
+    #Read past fetched data if exists
+    tweets_old_df = pd.read_csv(outf)
+    #Merge both old and new data
+    tweets_all_df = pd.concat([tweets_old_df, tweets_df], axis=0)
+    #Removing duplicates if exists
+    tweets_all_df.drop_duplicates(subset = ["user_name", "date", "text"], inplace=True)
+    #exporting data to update csv
+    #tweets_all_df.to_csv("covid19_tweets.csv", index=False)
+    #name= sword[1:-16]
+    #Read past fetched data if exists
+    #tweets_old_df = pd.read_csv("covid19_tweets.csv")
+    #Merge both old and new data
+    #tweets_all_df = pd.concat([tweets_old_df, tweets_df], axis=0)
+    #Removing duplicates if exists
+    #tweets_all_df.drop_duplicates(subset = ["user_name", "date", "text"], inplace=True)
+    #exporting data to update csv
+    #import os
+    #path = "C:/Users/encre/OneDrive/Desktop/2023LearnigVault/datasets"
+    #outf= os.path.join(path,(word[1:] +"_tweets.csv"))
+    tweets_all_df.to_csv(outf, index=False)
     
-    return tweets_df
+    return "tweets_df"
             
-#tweetretreive("#royalchallengers", "2021-01-01")
+
+for i in range(5):
+    tweetretreive("#NFT",1000)

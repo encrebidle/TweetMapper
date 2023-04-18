@@ -14,7 +14,7 @@ def dbquery(query_string):
     import pymysql
     import pandas as pd
     
-    db_string = credential_mysql()
+    db_string = credential_mysql('sql')
     engine = create_engine(db_string,
     connect_args={
         "ssl":{
