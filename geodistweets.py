@@ -135,14 +135,22 @@ def geotweets(hashtag):
     print('Number of Days in dataset:', len(dates))
     
     ####################################################################encrebidle
-    daily_tweets = folium.Map(tiles='cartodbpositron', min_zoom=2) 
+    
+    
+    daily_tweets = folium.Map(name = "Tweets Heatmap",tiles='cartodbpositron', min_zoom=2) 
+    #adding  political coordinates--optional
+    
+    #political = ("http://geojson.xyz/naturalearth-3.3.0/ne_50m_admin_0_countries.geojson")
+    #folium.GeoJson(political).add_to(daily_tweets)
 
     # Ensure you're handing it floats
     map_df['lat'] = map_df['lat'].astype(float)
     map_df['lng'] = map_df['lng'].astype(float)
     map_df['date'] = map_df['date'].str.split(' ').str.get(0)
 
+    
 
+    
     # List comprehension to make out list of lists
     heat_data = [[[row['lat'],row['lng']] for index, row in map_df[map_df['date'] == i].iterrows()] for i in dates]
 
@@ -151,7 +159,17 @@ def geotweets(hashtag):
                         scale_radius=False, gradient=None, use_local_extrema=False, auto_play=False, 
                         display_index=True, index_steps=1, min_speed=0.1, max_speed=10, speed_step=0.1, 
                         position='bottomleft', overlay=True, control=True, show=True)
+    lat= list(map_df['lat'])
+    lon = list(map_df['lng'])
+    d = list(map_df['date'])
+    
+    fg = folium.FeatureGroup(name="Tweets Map")
+    for lt, ln, el in zip(lat, lon, d):
+        fg.add_child(folium.Marker(location=[lt,ln], popup = [str(el)], icon = folium.Icon(color= 'blue')))
+
     hm.add_to(daily_tweets)
+    daily_tweets.add_child(fg)
+    folium.LayerControl().add_to(daily_tweets)
     # Display the map
     
     path ='C:/Users/encre/OneDrive/Desktop/2023LearnigVault/output_pages'
@@ -167,7 +185,7 @@ def geotweets(hashtag):
     map_df['lng'] = map_df['lng'].astype(float)
     map_df['date'] = map_df['date']
 
-
+    
     # List comprehension to make out list of lists
     heat_data = [[[row['lat'],row['lng']] for index, row in map_df[map_df['date'] == i].iterrows()] for i in dates]
 
@@ -176,8 +194,9 @@ def geotweets(hashtag):
                     period='P1D', min_speed=0.1, max_speed=10, loop_button=False, date_options='YYYY-MM-DD HH:mm:ss', 
                     time_slider_drag_update=False, duration=None)
     hm.add_to(timely_tweets)
+    
     # Display the map
-    timely_tweets
+    #timely_tweets
     return daily_tweets    
 
 
@@ -207,7 +226,65 @@ def geojson_features(map_df):
             features.append(feature)
         return features    
             
-        
+def popup_html(row):
+    i = row
+    institution_name=df['INSTNM'].iloc[i] 
+    institution_url=df['URL'].iloc[i]
+    institution_type = df['CONTROL'].iloc[i] 
+    highest_degree=df['HIGHDEG'].iloc[i] 
+    city_state = df['CITY'].iloc[i] +", "+ df['STABBR'].iloc[i]                     
+    admission_rate = df['ADM_RATE'].iloc[i]
+    cost = df['COSTT4_A'].iloc[i]
+    instate_tuit = df['TUITIONFEE_IN'].iloc[i]
+    outstate_tuit = df['TUITIONFEE_OUT'].iloc[i]
+
+    left_col_color = "#19a7bd"
+    right_col_color = "#f2f0d3"
+    
+    html = """<!DOCTYPE html>
+<html>
+<head>
+<h4 style="margin-bottom:10"; width="200px">{}</h4>""".format(institution_name) + """
+</head>
+    <table style="height: 126px; width: 350px;">
+<tbody>
+<tr>
+<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Institution Type</span></td>
+<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(institution_type) + """
+</tr>
+<tr>
+<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Institution URL</span></td>
+<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(institution_url) + """
+</tr>
+<tr>
+<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">City and State</span></td>
+<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(city_state) + """
+</tr>
+<tr>
+<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Highest Degree Awarded</span></td>
+<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(highest_degree) + """
+</tr>
+<tr>
+<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Admission Rate</span></td>
+<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(admission_rate) + """
+</tr>
+<tr>
+<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Annual Cost of Attendance $</span></td>
+<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(cost) + """
+</tr>
+<tr>
+<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">In-state Tuition $</span></td>
+<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(instate_tuit) + """
+</tr>
+<tr>
+<td style="background-color: """+ left_col_color +""";"><span style="color: #ffffff;">Out-of-state Tuition $</span></td>
+<td style="width: 150px;background-color: """+ right_col_color +""";">{}</td>""".format(outstate_tuit) + """
+</tr>
+</tbody>
+</table>
+</html>
+"""
+    return html        
 geotweets("#NFT")    
         
         
