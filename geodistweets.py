@@ -175,6 +175,7 @@ def geotweets(hashtag):
     path ='C:/Users/encre/OneDrive/Desktop/2023LearnigVault/output_pages'
     html_path= os.path.join(path,(hashtag[1:] +"_tweets.html"))
     daily_tweets.save(html_path)
+    daily_tweets.save("index.html")
     #daily tweets
     
     map_df = tweets[['lat','lng','user_location','date']].dropna()
